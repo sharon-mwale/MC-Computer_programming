@@ -1,7 +1,8 @@
-def power(base, exponent):
-    if exponent == 0:
-        return 1
-    else:
-        return base * power(base, exponent - 1)
-result = power(2, 3)
-print(result)  
+if __name__ =="__main__":
+    def power(base, exponent):
+        if exponent == 0:
+            return 1
+        else:
+            return base * power(base, exponent - 1)
+    result = power(2, 3)
+    print(result)  
