@@ -1,48 +1,61 @@
 import random
 
-
 def main():
-    hangman()
+    play_game()
 
-def hangman():
-    word_list = ["apple", "banana", "cherry", "durain", "elderberry", "fig", "grapefruit"]
-    word = random.choice(word_list)
-    guessed_letters = []
-    attempts = 6
+class HangmanGame:
+    def __init__(self):
+        self.word_list = ["apple", "banana", "cherry", "durain", "elderberry", "fig", "grapefruit"]
+        self.word = ""
+        self.guessed_letters = []
+        self.attempts = 6
 
+    def start_game(self):
+        self.word = random.choice(self.word_list)
+        self.guessed_letters = []
+        self.attempts = 6        
 
-    print("Welcome to hangman!")
-    print("_" * len(word))
+    def guess_letter(self, letter):
+        if len(letter) != 1:
+            return "Please enter a single letter."
 
-    while attempts > 0:
-        guess = input("Enter a letter: ").lower
+        if letter in self.guessed_letters:
+            return "You have already guessed that letter. Try again."
 
-        if len(guess) != 1:
-            print("Please enter a single letter.")
-            continue
-
-        if guess in guessed_letters:
-            print("You have already guessed that letter. Try Again")
-            continue
-
-        if guess not in word:
-            attempts-= 1
-            print("Incorrect guess. You have", attempts, "attempts left")
+        if letter not in self.word:
+            self.attempts -= 1
+            return "Incorrect guess. You have {} attempts left.".format(self.attempts)
         else:
-            guessed_letters.append(guess)
+            self .guessed_letters.append(letter)
 
         word_progress = ""
-        for letter in word:
-            word_progress += letter + ""
+        for char in self.word:
+            if char in self.guessed_letters:
+                word_progress += char + ""
         else:
             word_progress += "_"
 
-        print(word_progress)
-
         if "_" not in word_progress:
-            print("Congratulation! you have guessed the word correctly.")
-            return
-        print(f"You ran out of attempts. The word was, ${word}")
+            return"Congratulation! you have guessed the word correctly."
+        else:
+            return word_progress
+        
+def play_game():
+    while True:
+        game = HangmanGame()
+        game.start_game()
+        print("\nNew game! Guess the word:")
+        print(game.guess_letter(""))
+        while game.attempts > 0:
+            letter = input("Enter a letter: ")
+            result = game.guess_letter(letter)
+            print(result)
+            if "Congratulations" in result or "You ran out of attempts" in result:
+                break
 
+        play_again = input("Do you want to play again? (yes/no): ")
+        if play_again.lower() != "yes":
+            break
+                
 if __name__== "__main__":
     main()
